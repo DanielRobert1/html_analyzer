@@ -2,7 +2,7 @@
 namespace App\Services\AccessibilityAnalyzer\Rules;
 
 use App\Contracts\HtmlParserInterface;
-use App\Services\Accessibility\Contracts\AccessibilityRuleInterface;
+use App\Services\AccessibilityAnalyzer\Contracts\AccessibilityRuleInterface;
 
 class AltAttributeRule implements AccessibilityRuleInterface
 {

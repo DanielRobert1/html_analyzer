@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+       "allowJs":true,
+        "module":"ESNext",
+        "moduleResolution":"Node",
+        "target":"esnext",
+        "jsx":"react-jsx",
+        "strict":true,
+        "esModuleInterop":true,
+        "skipLibCheck":true,
+        "forceConsistentCasingInFileNames":true,
+        "noEmit":true,
+        "isolatedModules":true,
+        "types": ["vite/client"],
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["resources/*"],
+            "@resources/*": ["resources/*"],
+        }
+    },
+    "exclude": [
+      "node_modules", "public"
+    ]
+  }

@@ -1,5 +1,5 @@
 <?php
-namespace App\Services\Accessibility\Contracts;
+namespace App\Services\AccessibilityAnalyzer\Contracts;
 
 use App\Contracts\HtmlParserInterface;
 
