@@ -1,16 +1,23 @@
-import { Head, usePage } from "@inertiajs/react";
+import { Head } from "@inertiajs/react";
 import React, { useState } from "react";
 import axios from "axios";
+import { Chart } from 'react-google-charts';
+
+interface IssueDetail {
+    tag: string;
+    reason: string;
+}
 
 type Issue = {
-    type: string;
+    name: string;
     description: string;
+    count: number;
+    details: IssueDetail[];
 };
 
 type ResponseData = {
     score: number;
     issues: Issue[];
-    suggestions: string[];
 };
 
 export default function Home() {
@@ -39,7 +46,7 @@ export default function Home() {
 
         try {
             const res = await axios.post<ResponseData>(
-                "/api/upload",
+                "/api/accessibility-analyze",
                 formData,
                 {
                     headers: {
@@ -58,23 +65,39 @@ export default function Home() {
         }
     };
 
+    const getChartData = () => {
+        if (!response) return [];
+
+        const data = [
+            ["Issue", "Count"],
+            ...response.issues.map(issue => [issue.name, issue.count]),
+        ];
+        return data;
+    };
+
     return (
         <>
             <Head title="Home" />
             <div
                 style={{
-                    maxWidth: "600px",
+                    maxWidth: "800px",
                     margin: "50px auto",
                     padding: "20px",
                     border: "1px solid #ddd",
                     borderRadius: "8px",
+                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                 }}
             >
-                <h2 style={{ textAlign: "center" }}>
+                <h2 style={{ textAlign: "center", color: "#007BFF" }}>
                     File Accessibility Checker
                 </h2>
 
-                <div style={{ marginBottom: "20px" }}>
+                <div
+                    style={{
+                        marginBottom: "20px",
+                        transition: "all 0.3s ease",
+                    }}
+                >
                     <input
                         type="file"
                         onChange={handleFileChange}
@@ -96,6 +119,7 @@ export default function Home() {
                             border: "none",
                             borderRadius: "4px",
                             cursor: "pointer",
+                            fontWeight: "bold",
                         }}
                         disabled={loading}
                     >
@@ -122,25 +146,43 @@ export default function Home() {
                             border: "1px solid #ccc",
                             borderRadius: "4px",
                             backgroundColor: "#f9f9f9",
+                            marginTop: "20px",
+                            transition: "all 0.3s ease",
                         }}
                     >
-                        <h3>Accessibility Report</h3>
+                        <h3 style={{ color: "#007BFF" }}>Accessibility Report</h3>
                         <p>
                             <strong>Score:</strong> {response.score}
                         </p>
-                        <h4>Issues</h4>
-                        <ul>
+
+                        <Chart
+                            chartType="PieChart"
+                            data={getChartData()}
+                            options={{
+                                title: "Accessibility Issues",
+                                pieHole: 0.4,
+                                slices: {
+                                    0: { color: "#f54242" },
+                                    1: { color: "#f5a742" },
+                                },
+                            }}
+                            width="100%"
+                            height="400px"
+                        />
+
+                        <h4 style={{ marginTop: "20px" }}>Detailed Issues</h4>
+                        <ul style={{ paddingLeft: "20px" }}>
                             {response.issues.map((issue, index) => (
-                                <li key={index}>
-                                    <strong>{issue.type}:</strong>{" "}
-                                    {issue.description}
+                                <li key={index} style={{ marginBottom: "10px" }}>
+                                    <strong>{issue.name}:</strong> {issue.description}
+                                    <ul style={{ marginTop: "5px", paddingLeft: "20px" }}>
+                                        {issue.details.map((detail, i) => (
+                                            <li key={i}>
+                                                <code>{detail.tag}</code>: {detail.reason}
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </li>
-                            ))}
-                        </ul>
-                        <h4>Suggestions</h4>
-                        <ul>
-                            {response.suggestions.map((suggestion, index) => (
-                                <li key={index}>{suggestion}</li>
                             ))}
                         </ul>
                     </div>

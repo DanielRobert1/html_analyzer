@@ -2,7 +2,8 @@
 namespace App\Services\AccessibilityAnalyzer;
 
 use App\Contracts\HtmlParserInterface;
-use App\Services\Accessibility\Contracts\AccessibilityRuleInterface;
+use App\Services\AccessibilityAnalyzer\Contracts\AccessibilityRuleInterface;
+use Illuminate\Support\Facades\Log;
 
 class AccessibilityAnalyzer
 {
@@ -12,7 +13,6 @@ class AccessibilityAnalyzer
     public function __construct(HtmlParserInterface $parser, array $rules)
     {
         $this->parser = $parser;
-        // Ensure all rules implement AccessibilityRuleInterface
         foreach ($rules as $rule) {
             if (!$rule instanceof AccessibilityRuleInterface) {
                 throw new \InvalidArgumentException('All rules must implement AccessibilityRuleInterface.');
@@ -23,7 +23,7 @@ class AccessibilityAnalyzer
 
     public function analyze(string $html): array
     {
-        $this->parser->__construct($html); // Reinitialize the parser with the new HTML
+        $this->parser->loadHtml($html);
         $issues = [];
         $score = 100;
 

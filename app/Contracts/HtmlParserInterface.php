@@ -3,6 +3,6 @@ namespace App\Contracts;
 
 interface HtmlParserInterface
 {
-    public function __construct(string $html);
+    public function loadHtml(string $html): void;
     public function getTags(string $tagName): array;
 }

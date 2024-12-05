@@ -13,11 +13,43 @@ class FormLabelRule implements AccessibilityRuleInterface
 
     public function getDescription(): string
     {
-        return 'Ensures form labels.';
+        return 'Ensures every input field within a form has an associated label for accessibility.';
     }
 
     public function evaluate(HtmlParserInterface $parser): array
     {
-        return [];
+        $forms = $parser->getTags('form'); // Get all forms
+        $issues = [];
+
+        foreach ($forms as $form) {
+            $inputs = $form->getElementsByTagName('input');
+            foreach ($inputs as $input) {
+                $type = $input->getAttribute('type');
+                if (in_array($type, ['hidden', 'submit', 'button', 'reset'])) {
+                    continue; // Skip non-visible or button inputs
+                }
+
+                $id = $input->getAttribute('id');
+                $label = null;
+
+                if ($id) {
+                    $label = $form->ownerDocument->getElementById($id);
+                }
+
+                if (!$label || $label->tagName !== 'label') {
+                    $issues[] = [
+                        'tag' => $form->ownerDocument->saveHTML($input),
+                        'reason' => 'Input field is missing an associated <label> element.',
+                    ];
+                }
+            }
+        }
+
+        return [
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'count' => count($issues),
+            'details' => $issues,
+        ];
     }
 }
