@@ -1,8 +1,10 @@
 <?php
+
 namespace App\Services\AccessibilityAnalyzer\Rules;
 
 use App\Contracts\HtmlParserInterface;
 use App\Services\AccessibilityAnalyzer\Contracts\AccessibilityRuleInterface;
+use Illuminate\Support\Facades\Log;
 
 class FormLabelRule implements AccessibilityRuleInterface
 {
@@ -33,18 +35,23 @@ class FormLabelRule implements AccessibilityRuleInterface
                 $label = null;
 
                 if ($id) {
-                    $label = $form->ownerDocument->getElementById($id);
+                    // Use DOMXPath to find the label by its "for" attribute that matches the input's "id"
+                    $xpath = new \DOMXPath($form->ownerDocument);
+                    $label = $xpath->query("//label[@for='$id']")->item(0); // Find label by "for" attribute
                 }
 
-                if (!$label || $label->tagName !== 'label') {
+                if (!$label) {
+                    // No label associated with the input field
                     $issues[] = [
                         'tag' => $form->ownerDocument->saveHTML($input),
                         'reason' => 'Input field is missing an associated <label> element.',
+                        'suggestion' => 'Ensure that every input field has an associated <label> element, either by using the "for" attribute with the input\'s ID or by wrapping the input inside the <label> element.',
                         'severity' => 5,
                     ];
                 }
             }
         }
+
 
         return [
             'name' => $this->getName(),
