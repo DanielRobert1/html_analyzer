@@ -15,3 +15,13 @@ export type ResponseData = {
     score: number;
     issues: Issue[];
 };
+
+export interface FileUploadProps {
+    handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    handleUpload: () => void;
+    loading: boolean;
+}
+
+export interface AccessibilityReportProps {
+    response: ResponseData;
+}

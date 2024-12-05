@@ -33,7 +33,5 @@ class AnalyzerController extends Controller
             report($th);
             return $this->sendError("Unable to process file!");
         }
-
-
     }
 }
