@@ -3,6 +3,7 @@ namespace App\Services\AccessibilityAnalyzer\Rules;
 
 use App\Contracts\HtmlParserInterface;
 use App\Services\AccessibilityAnalyzer\Contracts\AccessibilityRuleInterface;
+use Illuminate\Support\Facades\Log;
 
 class AltAttributeRule implements AccessibilityRuleInterface
 {
@@ -26,20 +27,22 @@ class AltAttributeRule implements AccessibilityRuleInterface
             $role = $tag->getAttribute('role');
             $ariaHidden = $tag->getAttribute('aria-hidden');
 
-            if ($alt === null) {
-                // Missing alt attribute
-                $issues[] = [
-                    'tag' => $tag->ownerDocument->saveHTML($tag),
-                    'reason' => 'Missing alt attribute.',
-                    'severity' => 5,
-                ];
-            } elseif ($alt === '' && $role !== 'presentation' && $ariaHidden !== 'true') {
-                // Empty alt attribute without being decorative
-                $issues[] = [
-                    'tag' => $tag->ownerDocument->saveHTML($tag),
-                    'reason' => 'Empty alt attribute without being marked as decorative (e.g., role="presentation" or aria-hidden="true").',
-                    'severity' => 3,
-                ];
+
+            $alt = $tag->getAttribute('alt');
+            $role = $tag->getAttribute('role');
+            $ariaHidden = $tag->getAttribute('aria-hidden');
+
+            // Check for missing or empty alt attribute
+            if ($alt === null || $alt === '') {
+                if ($role !== 'presentation' && $ariaHidden !== 'true') {
+                    // Missing alt attribute or empty alt attribute without being marked as decorative
+                    $issues[] = [
+                        'tag' => $tag->ownerDocument->saveHTML($tag),
+                        'reason' => 'Missing alt attribute.',
+                        'suggestion' => 'If the image is meaningful, add an appropriate alt text. If the image is decorative, set role="presentation" or aria-hidden="true".',
+                        'severity' => 5,
+                    ];
+                }
             }
         }
 

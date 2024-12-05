@@ -44,6 +44,7 @@ class HeadingStructureRule implements AccessibilityRuleInterface
                 $issues[] = [
                     'tag' => $tag->ownerDocument->saveHTML($tag),
                     'reason' => 'Skipped heading levels. Expected heading level: ' . ($previousHeadingLevel + 1),
+                    'suggestion' => 'Ensure headings follow a logical order. If the current heading level is skipped, adjust the heading hierarchy.',
                     'severity' => 3,
                 ];
             }
