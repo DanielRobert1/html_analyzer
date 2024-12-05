@@ -71,26 +71,62 @@
 }
 
 .issueList {
-    padding-left: 20px;
-}
+    list-style-type: none;
+    padding-left: 0;
+  }
 
-.issueItem {
-    margin-bottom: 10px;
-}
+  .issueItem {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+  }
 
-.issueName {
+  .issueName {
+    font-size: 1.1em;
     font-weight: bold;
-}
+  }
 
-.issueDetails {
-    margin-top: 5px;
-    padding-left: 20px;
-}
-
-.detailTag {
-    font-weight: bold;
-}
-
-.detailReason {
+  .issueDescription {
+    margin: 10px 0;
+    font-size: 0.95em;
     color: #555;
-}
+  }
+
+  .issueDetails {
+    list-style-type: none;
+    padding-left: 20px;
+    margin-top: 10px;
+  }
+
+  .issueDetailItem {
+    margin-bottom: 10px;
+    font-size: 0.9em;
+  }
+
+  .detailTag {
+    font-family: monospace;
+    background-color: #f0f0f0;
+    padding: 2px 5px;
+    border-radius: 4px;
+  }
+
+  .detailReason {
+    color: #d9534f;
+  }
+
+  .detailSuggestion {
+    font-size: 0.9em;
+    color: #5bc0de;
+    margin-top: 5px;
+  }
+
+  .suggestionText {
+    margin-top: 5px;
+  }
+
+  .noIssues {
+    font-size: 1.1em;
+    color: #333;
+    margin-top: 20px;
+  }

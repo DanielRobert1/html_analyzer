@@ -1,6 +1,7 @@
 export interface IssueDetail {
     tag: string;
     reason: string;
+    suggestion: string;
 }
 
 export type Issue = {
