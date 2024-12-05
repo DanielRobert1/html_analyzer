@@ -27,7 +27,7 @@ const Home: React.FC = () => {
         <>
             <Head title="Home" />
             <div className={styles.container}>
-                <h2 className={styles.header}>File Accessibility Checker</h2>
+                <h2 className={styles.header}>Daniel Aigbe File Accessibility Checker</h2>
 
                 <div className={styles.inputWrapper}>
                     <input
@@ -61,81 +61,92 @@ const Home: React.FC = () => {
                             </div>
                         </div>
 
-                        <AccessibilityChart issues={response.issues} />
-
                         {response.issues.length > 0 && (
                             <div>
-                                <h4 style={{ marginTop: "20px" }}>
-                                    Detailed Issues
-                                </h4>
-                                <ul className={styles.issueList}>
-                                    {response.issues.map((issue, index) => (
-                                        <li
-                                            key={index}
-                                            className={styles.issueItem}
-                                        >
-                                            <div className={styles.issueName}>
-                                                <strong>{issue.name}:</strong>
-                                            </div>
-                                            <div
-                                                className={
-                                                    styles.issueDescription
-                                                }
+                                <AccessibilityChart issues={response.issues} />
+                                <div>
+                                    <h4 style={{ marginTop: "20px" }}>
+                                        Detailed Issues
+                                    </h4>
+                                    <ul className={styles.issueList}>
+                                        {response.issues.map((issue, index) => (
+                                            <li
+                                                key={index}
+                                                className={styles.issueItem}
                                             >
-                                                {issue.description}
-                                            </div>
-                                            <ul className={styles.issueDetails}>
-                                                {issue.details.map(
-                                                    (detail, i) => (
-                                                        <li
-                                                            key={i}
-                                                            className={
-                                                                styles.issueDetailItem
-                                                            }
-                                                        >
-                                                            <code
+                                                <div
+                                                    className={styles.issueName}
+                                                >
+                                                    <strong>
+                                                        {issue.name}:
+                                                    </strong>
+                                                </div>
+                                                <div
+                                                    className={
+                                                        styles.issueDescription
+                                                    }
+                                                >
+                                                    {issue.description}
+                                                </div>
+                                                <ul
+                                                    className={
+                                                        styles.issueDetails
+                                                    }
+                                                >
+                                                    {issue.details.map(
+                                                        (detail, i) => (
+                                                            <li
+                                                                key={i}
                                                                 className={
-                                                                    styles.detailTag
+                                                                    styles.issueDetailItem
                                                                 }
                                                             >
-                                                                {detail.tag}
-                                                            </code>
-                                                            :{" "}
-                                                            <span
-                                                                className={
-                                                                    styles.detailReason
-                                                                }
-                                                            >
-                                                                {detail.reason}
-                                                            </span>
-                                                            <span
-                                                                className={
-                                                                    styles.detailSuggestion
-                                                                }
-                                                            >
-                                                                {/* Optionally add suggestion if it exists */}
-                                                                {detail.suggestion && (
-                                                                    <div
-                                                                        className={
-                                                                            styles.suggestionText
-                                                                        }
-                                                                    >
-                                                                        <strong>
-                                                                            Suggestion:
-                                                                        </strong>{" "}
-                                                                        {
-                                                                            detail.suggestion
-                                                                        }
-                                                                    </div>
-                                                                )}
-                                                            </span>
-                                                        </li>
-                                                    )
-                                                )}
-                                            </ul>
-                                        </li>
-                                    ))}
-                                </ul>
+                                                                <code
+                                                                    className={
+                                                                        styles.detailTag
+                                                                    }
+                                                                >
+                                                                    {detail.tag}
+                                                                </code>
+                                                                :{" "}
+                                                                <span
+                                                                    className={
+                                                                        styles.detailReason
+                                                                    }
+                                                                >
+                                                                    {
+                                                                        detail.reason
+                                                                    }
+                                                                </span>
+                                                                <span
+                                                                    className={
+                                                                        styles.detailSuggestion
+                                                                    }
+                                                                >
+                                                                    {/* Optionally add suggestion if it exists */}
+                                                                    {detail.suggestion && (
+                                                                        <div
+                                                                            className={
+                                                                                styles.suggestionText
+                                                                            }
+                                                                        >
+                                                                            <strong>
+                                                                                Suggestion:
+                                                                            </strong>{" "}
+                                                                            {
+                                                                                detail.suggestion
+                                                                            }
+                                                                        </div>
+                                                                    )}
+                                                                </span>
+                                                            </li>
+                                                        )
+                                                    )}
+                                                </ul>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
                             </div>
                         )}
                         {response.issues.length === 0 && (
