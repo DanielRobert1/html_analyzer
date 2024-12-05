@@ -31,12 +31,14 @@ class AltAttributeRule implements AccessibilityRuleInterface
                 $issues[] = [
                     'tag' => $tag->ownerDocument->saveHTML($tag),
                     'reason' => 'Missing alt attribute.',
+                    'severity' => 5,
                 ];
             } elseif ($alt === '' && $role !== 'presentation' && $ariaHidden !== 'true') {
                 // Empty alt attribute without being decorative
                 $issues[] = [
                     'tag' => $tag->ownerDocument->saveHTML($tag),
                     'reason' => 'Empty alt attribute without being marked as decorative (e.g., role="presentation" or aria-hidden="true").',
+                    'severity' => 3,
                 ];
             }
         }

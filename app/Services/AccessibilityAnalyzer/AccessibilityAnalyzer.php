@@ -29,12 +29,19 @@ class AccessibilityAnalyzer
 
         foreach ($this->rules as $rule) {
             $result = $rule->evaluate($this->parser);
+
             if ($result['count'] > 0) {
                 $issues[] = $result;
-                $score -= $result['count'] * 5;
+
+                // Apply severity-based score reduction
+                foreach ($result['details'] as $issue) {
+                    $severity = $issue['severity'] ?? 5; // Default to 5 if no severity is specified
+                    $score -= $severity;
+                }
             }
         }
 
+        // Ensure score doesn't go below 0
         return [
             'score' => max($score, 0),
             'issues' => $issues,

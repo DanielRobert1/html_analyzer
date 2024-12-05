@@ -1,0 +1,96 @@
+/* src/pages/Home.module.css */
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    text-align: center;
+    color: #007BFF;
+}
+
+.inputWrapper {
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.inputFile {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.error {
+    color: red;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.reportWrapper {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+.scoreWrapper {
+    margin-top: 20px;
+}
+
+.progressBarWrapper {
+    background-color: #ddd;
+    height: 20px;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.progressBar {
+    background-color: #28a745;
+    height: 100%;
+}
+
+.issueList {
+    padding-left: 20px;
+}
+
+.issueItem {
+    margin-bottom: 10px;
+}
+
+.issueName {
+    font-weight: bold;
+}
+
+.issueDetails {
+    margin-top: 5px;
+    padding-left: 20px;
+}
+
+.detailTag {
+    font-weight: bold;
+}
+
+.detailReason {
+    color: #555;
+}

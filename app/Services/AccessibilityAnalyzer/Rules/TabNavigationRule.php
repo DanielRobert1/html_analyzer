@@ -17,12 +17,11 @@ class TabNavigationRule implements AccessibilityRuleInterface
         return 'Ensures all actionable elements can be navigated using the Tab key.';
     }
 
+
     public function evaluate(HtmlParserInterface $parser): array
     {
         // Get actionable elements
         $actionableElements = $parser->getTags('a, button, input, select, textarea, [tabindex]');
-
-        Log::info($actionableElements);
 
         $issues = [];
 
@@ -34,6 +33,7 @@ class TabNavigationRule implements AccessibilityRuleInterface
                 $issues[] = [
                     'tag' => $element->ownerDocument->saveHTML($element),
                     'reason' => 'Element has a tabindex less than 0, making it inaccessible via Tab navigation.',
+                    'severity' => 10,
                 ];
             }
 
@@ -42,6 +42,7 @@ class TabNavigationRule implements AccessibilityRuleInterface
                 $issues[] = [
                     'tag' => $element->ownerDocument->saveHTML($element),
                     'reason' => 'Element is not tabbable and lacks an explicit tabindex.',
+                    'severity' => 10,
                 ];
             }
         }

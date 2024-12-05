@@ -40,6 +40,7 @@ class FormLabelRule implements AccessibilityRuleInterface
                     $issues[] = [
                         'tag' => $form->ownerDocument->saveHTML($input),
                         'reason' => 'Input field is missing an associated <label> element.',
+                        'severity' => 5,
                     ];
                 }
             }

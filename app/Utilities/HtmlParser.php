@@ -19,8 +19,15 @@ class HtmlParser implements HtmlParserInterface
         @$this->dom->loadHTML($html); // Suppress warnings for malformed HTML
     }
 
-    public function getTags(string $tagName): array
+    public function getTags(string $tagNames): array
     {
-        return iterator_to_array($this->dom->getElementsByTagName($tagName));
+        $tags = [];
+        $tagsList = explode(', ', $tagNames); // Split the tag names into an array
+
+        foreach ($tagsList as $tagName) {
+            $tags = array_merge($tags, iterator_to_array($this->dom->getElementsByTagName($tagName)));
+        }
+
+        return $tags;
     }
 }

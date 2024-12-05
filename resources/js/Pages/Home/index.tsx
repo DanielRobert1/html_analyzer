@@ -1,30 +1,12 @@
-import { Head } from "@inertiajs/react";
-import React, { useState } from "react";
-import axios from "axios";
-import { Chart } from 'react-google-charts';
+import React, { useState } from 'react';
+import { Head } from '@inertiajs/react';
+import styles from './Home.module.css';
+import AccessibilityChart from '../../Components/AccessibilityChart';
+import useUploadFile from '../../hooks/useUploadFile';
 
-interface IssueDetail {
-    tag: string;
-    reason: string;
-}
-
-type Issue = {
-    name: string;
-    description: string;
-    count: number;
-    details: IssueDetail[];
-};
-
-type ResponseData = {
-    score: number;
-    issues: Issue[];
-};
-
-export default function Home() {
+const Home: React.FC = () => {
     const [file, setFile] = useState<File | null>(null);
-    const [response, setResponse] = useState<ResponseData | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
+    const { upload, loading, error, response } = useUploadFile();
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
@@ -34,151 +16,69 @@ export default function Home() {
 
     const handleUpload = async () => {
         if (!file) {
-            alert("Please select a file to upload.");
+            alert('Please select a file to upload.');
             return;
         }
 
-        setLoading(true);
-        setError(null);
-
-        const formData = new FormData();
-        formData.append("file", file);
-
-        try {
-            const res = await axios.post<ResponseData>(
-                "/api/accessibility-analyze",
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                }
-            );
-            setResponse(res.data);
-        } catch (err: any) {
-            setError(
-                err.response?.data?.message ||
-                    "An error occurred while uploading the file."
-            );
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const getChartData = () => {
-        if (!response) return [];
-
-        const data = [
-            ["Issue", "Count"],
-            ...response.issues.map(issue => [issue.name, issue.count]),
-        ];
-        return data;
+        await upload(file);
     };
 
     return (
         <>
             <Head title="Home" />
-            <div
-                style={{
-                    maxWidth: "800px",
-                    margin: "50px auto",
-                    padding: "20px",
-                    border: "1px solid #ddd",
-                    borderRadius: "8px",
-                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                }}
-            >
-                <h2 style={{ textAlign: "center", color: "#007BFF" }}>
-                    File Accessibility Checker
-                </h2>
+            <div className={styles.container}>
+                <h2 className={styles.header}>File Accessibility Checker</h2>
 
-                <div
-                    style={{
-                        marginBottom: "20px",
-                        transition: "all 0.3s ease",
-                    }}
-                >
+                <div className={styles.inputWrapper}>
                     <input
                         type="file"
                         onChange={handleFileChange}
-                        style={{
-                            width: "100%",
-                            padding: "10px",
-                            marginBottom: "10px",
-                            border: "1px solid #ccc",
-                            borderRadius: "4px",
-                        }}
+                        className={styles.inputFile}
                     />
                     <button
                         onClick={handleUpload}
-                        style={{
-                            width: "100%",
-                            padding: "10px",
-                            backgroundColor: "#007BFF",
-                            color: "#fff",
-                            border: "none",
-                            borderRadius: "4px",
-                            cursor: "pointer",
-                            fontWeight: "bold",
-                        }}
+                        className={styles.button}
                         disabled={loading}
                     >
-                        {loading ? "Uploading..." : "Upload File"}
+                        {loading ? 'Uploading...' : 'Upload File'}
                     </button>
                 </div>
 
-                {error && (
-                    <div
-                        style={{
-                            color: "red",
-                            textAlign: "center",
-                            marginBottom: "20px",
-                        }}
-                    >
-                        {error}
-                    </div>
-                )}
+                {error && <div className={styles.error}>{error}</div>}
 
                 {response && (
-                    <div
-                        style={{
-                            padding: "10px",
-                            border: "1px solid #ccc",
-                            borderRadius: "4px",
-                            backgroundColor: "#f9f9f9",
-                            marginTop: "20px",
-                            transition: "all 0.3s ease",
-                        }}
-                    >
-                        <h3 style={{ color: "#007BFF" }}>Accessibility Report</h3>
-                        <p>
-                            <strong>Score:</strong> {response.score}
-                        </p>
+                    <div className={styles.reportWrapper}>
+                        <h3 className={styles.header}>Accessibility Report</h3>
+                        <div className={styles.scoreWrapper}>
+                            <p><strong>Score:</strong> {response.score}</p>
+                            <div className={styles.progressBarWrapper}>
+                                <div
+                                    className={styles.progressBar}
+                                    style={{ width: `${response.score}%` }}
+                                />
+                            </div>
+                        </div>
 
-                        <Chart
-                            chartType="PieChart"
-                            data={getChartData()}
-                            options={{
-                                title: "Accessibility Issues",
-                                pieHole: 0.4,
-                                slices: {
-                                    0: { color: "#f54242" },
-                                    1: { color: "#f5a742" },
-                                },
-                            }}
-                            width="100%"
-                            height="400px"
-                        />
+                        <AccessibilityChart issues={response.issues} />
 
-                        <h4 style={{ marginTop: "20px" }}>Detailed Issues</h4>
-                        <ul style={{ paddingLeft: "20px" }}>
+                        <h4 style={{ marginTop: '20px' }}>Detailed Issues</h4>
+                        <ul className={styles.issueList}>
                             {response.issues.map((issue, index) => (
-                                <li key={index} style={{ marginBottom: "10px" }}>
-                                    <strong>{issue.name}:</strong> {issue.description}
-                                    <ul style={{ marginTop: "5px", paddingLeft: "20px" }}>
+                                <li key={index} className={styles.issueItem}>
+                                    <div className={styles.issueName}>
+                                        {issue.name}:
+                                    </div>
+                                    {issue.description}
+                                    <ul className={styles.issueDetails}>
                                         {issue.details.map((detail, i) => (
                                             <li key={i}>
-                                                <code>{detail.tag}</code>: {detail.reason}
+                                                <code className={styles.detailTag}>
+                                                    {detail.tag}
+                                                </code>
+                                                :{" "}
+                                                <span className={styles.detailReason}>
+                                                    {detail.reason}
+                                                </span>
                                             </li>
                                         ))}
                                     </ul>
@@ -190,4 +90,6 @@ export default function Home() {
             </div>
         </>
     );
-}
+};
+
+export default Home;

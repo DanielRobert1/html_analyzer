@@ -3,6 +3,7 @@ namespace App\Services\AccessibilityAnalyzer\Rules;
 
 use App\Contracts\HtmlParserInterface;
 use App\Services\AccessibilityAnalyzer\Contracts\AccessibilityRuleInterface;
+use Illuminate\Support\Facades\Log;
 
 class HeadingStructureRule implements AccessibilityRuleInterface
 {
@@ -18,7 +19,9 @@ class HeadingStructureRule implements AccessibilityRuleInterface
 
     public function evaluate(HtmlParserInterface $parser): array
     {
-        $headings = $parser->getTags('h1, h2, h3, h4, h5, h6'); // Get all heading tags
+        // Get all heading tags (h1, h2, h3, ..., h6)
+        $headings = $parser->getTags('h1, h2, h3, h4, h5, h6');
+
         $issues = [];
         $previousHeadingLevel = 0; // Keeps track of the last heading level
 
@@ -41,6 +44,7 @@ class HeadingStructureRule implements AccessibilityRuleInterface
                 $issues[] = [
                     'tag' => $tag->ownerDocument->saveHTML($tag),
                     'reason' => 'Skipped heading levels. Expected heading level: ' . ($previousHeadingLevel + 1),
+                    'severity' => 3,
                 ];
             }
 
