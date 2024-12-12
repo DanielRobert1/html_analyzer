@@ -1,6 +1,6 @@
 # HTML Analyzer
 
-This is a test assignment submission by Daniel Robert Aigbe.
+This is a test assignment submission by Daniel Robert Aigbe. Please find the design documentation here [here](DOCUMENTATION.md)
 
 ## Requirements
 
