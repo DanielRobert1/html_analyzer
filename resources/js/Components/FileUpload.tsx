@@ -7,6 +7,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleFileChange, handleUpload,
         <input
             type="file"
             onChange={handleFileChange}
+            role="file"
             className={styles.inputFile}
         />
         <button
