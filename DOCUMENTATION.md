@@ -32,9 +32,12 @@ The system consists of the following components:
 - **TabNavigationRule**: Ensures all actionable elements can be navigated using the Tab key.
 
 ### Scoring Logic
-- Each issue is weighted equally.
-- Compliance score: `100 - (Issues * Severity)`.
-- The score decreases by 10 points for each issue found in the HTML file, with a minimum score of 0.
+#### Compliance Score
+- Issues are categorized by severity:
+  - **High** (e.g., Missing `tabindex`): -10 points per issue.
+  - **Medium** (e.g., Missing `alt`): -5 points per issue.
+  - **Low** (e.g., Minor label issues): -3 points per issue.
+- Total score = `100 - ∑(IssueSeverity * Count)`.
 
 ### API Endpoints
 - **POST /api/accessibility-analyze**: Accepts HTML files for analysis.
@@ -49,14 +52,6 @@ The system consists of the following components:
 - **FileUploader**: Handles file selection and API interaction.
 - **AccessibilityChart**: Visualizes compliance scores.
 - **ResultsDisplay**: Displays scores and issues breakdown.
-
-### Scoring Logic
-#### Compliance Score
-- Issues are categorized by severity:
-  - **High** (e.g., Missing `tabindex`): -10 points per issue.
-  - **Medium** (e.g., Missing `alt`): -5 points per issue.
-  - **Low** (e.g., Minor label issues): -3 points per issue.
-- Total score = `100 - ∑(IssueSeverity * Count)`.
 
 ## Future Considerations
 - Support for additional WCAG rules.
